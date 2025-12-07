@@ -19,6 +19,7 @@ public:
     double evaluateRisk(Transaction t, const vector<Transaction>& last5);
 };
 
+// Utility functions
 long computeTimestamp(const string& date, const string& time);
 vector<Transaction> readTransactionsFromFile(const string& filename);
 

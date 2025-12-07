@@ -4,9 +4,13 @@
 #include <sstream>
 #include <cmath>
 
-bool FraudRules::isBlacklisted(int acc) { return blacklistedAccounts.count(acc); }
+bool FraudRules::isBlacklisted(int acc) {
+    return blacklistedAccounts.count(acc);
+}
 
-void FraudRules::addToBlacklist(int acc) { blacklistedAccounts.insert(acc); }
+void FraudRules::addToBlacklist(int acc) {
+    blacklistedAccounts.insert(acc);
+}
 
 double FraudRules::amountRule(Transaction t, const vector<Transaction>& last5) {
     if (last5.empty()) return 0;
@@ -61,24 +65,11 @@ vector<Transaction> readTransactionsFromFile(const string& filename) {
     }
 
     string line;
-    getline(file, line); // skip header
-
     while (getline(file, line)) {
         stringstream ss(line);
-        string token;
         Transaction t;
-
-        getline(ss, token, ','); t.amount = stod(token);
-        getline(ss, token, ','); t.currency = token;
-        getline(ss, token, ','); t.fromAccount = stoi(token);
-        getline(ss, token, ','); t.toAccount = stoi(token);
-        getline(ss, token, ','); t.location = token;
-        getline(ss, token, ','); t.type = token;
-        getline(ss, token, ','); t.date = token;
-        getline(ss, token, ','); t.time = token;
-
+        ss >> t.amount >> t.type >> t.fromAccount >> t.location >> t.date >> t.time;
         t.timestamp = computeTimestamp(t.date, t.time);
-
         transactions.push_back(t);
     }
 

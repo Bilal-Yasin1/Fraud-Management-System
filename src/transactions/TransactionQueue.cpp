@@ -22,5 +22,7 @@ bool TransactionQueue::dequeue(Transaction &removed) {
     return true;
 }
 
-bool TransactionQueue::isEmpty() { return front == nullptr; }
+bool TransactionQueue::isEmpty() {
+    return front == nullptr;
+}
 

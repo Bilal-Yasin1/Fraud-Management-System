@@ -5,15 +5,13 @@
 using namespace std;
 
 struct Transaction {
-    int fromAccount;
-    int toAccount;
+    int fromAccount;       // account ID
     double amount;
-    string currency;
+    string type;           // deposit or withdrawal
     string location;
-    string type; // debit or credit
-    string date; // "YYYY-MM-DD"
-    string time; // "HH:MM:SS"
-    long timestamp; // numeric timestamp for rapid txn rule
+    string date;           // "YYYY-MM-DD"
+    string time;           // "HH:MM:SS"
+    long timestamp;        // numeric timestamp for rapid txn rule
 };
 
 #endif // TRANSACTION_H
