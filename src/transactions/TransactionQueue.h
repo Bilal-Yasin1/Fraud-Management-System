@@ -10,15 +10,17 @@ private:
         Node* next;
         Node(Transaction t) : data(t), next(nullptr) {}
     };
+
     Node* front;
     Node* rear;
 
 public:
     TransactionQueue();
-    void enqueue(Transaction t);
-    bool dequeue(Transaction &removed);
-    bool isEmpty();
+    ~TransactionQueue();
+    void enqueue(const Transaction& t);
+    bool dequeue(Transaction& removed);
+    bool isEmpty() const;
+    void printAll() const;
 };
 
-#endif // TRANSACTIONQUEUE_H
-
+#endif

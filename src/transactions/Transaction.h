@@ -5,14 +5,23 @@
 using namespace std;
 
 struct Transaction {
-    int fromAccount;       // account ID
+    int transactionID;
+    int accountID;
     double amount;
-    string type;           // deposit or withdrawal
+    string type;      // CREDIT / DEBIT
     string location;
-    string date;           // "YYYY-MM-DD"
-    string time;           // "HH:MM:SS"
-    long timestamp;        // numeric timestamp for rapid txn rule
+    string date;      // YYYY-MM-DD
+    string time;      // HH:MM:SS
+    long timestamp;   // epoch seconds
+    int riskScore;
+
+    Transaction() : transactionID(0), accountID(0), amount(0), riskScore(0) {}
+
+    // Add this constructor
+    Transaction(int txnID, int accID, double amt, const string& t,
+                const string& loc, const string& d, const string& tm, long ts)
+        : transactionID(txnID), accountID(accID), amount(amt), type(t),
+          location(loc), date(d), time(tm), timestamp(ts), riskScore(0) {}
 };
 
-#endif // TRANSACTION_H
-
+#endif

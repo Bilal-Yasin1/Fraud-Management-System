@@ -1,0 +1,25 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build FraudSystem",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "src/main.cpp",
+                "src/accounts/AccountBST.cpp",
+                "src/risk/RiskHeap.cpp",
+                "src/transactions/TransactionQueue.cpp",
+                "src/transactions/FraudRules.cpp",
+                "-o",
+                "src/FraudSystem.exe",
+                "-std=c++17"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        }
+    ]
+}

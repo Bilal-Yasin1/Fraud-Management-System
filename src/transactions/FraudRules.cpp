@@ -1,10 +1,13 @@
 #include "FraudRules.h"
-#include <iostream>
 #include <fstream>
 #include <sstream>
+#include <iostream>
 #include <cmath>
+#include <ctime>
 
-bool FraudRules::isBlacklisted(int acc) {
+using namespace std;
+
+bool FraudRules::isBlacklisted(int acc) const {
     return blacklistedAccounts.count(acc);
 }
 
@@ -12,68 +15,77 @@ void FraudRules::addToBlacklist(int acc) {
     blacklistedAccounts.insert(acc);
 }
 
-double FraudRules::amountRule(Transaction t, const vector<Transaction>& last5) {
+double FraudRules::amountRule(const Transaction& t,
+                              const vector<Transaction>& last5) const {
     if (last5.empty()) return 0;
+
     double avg = 0;
-    for (auto &x : last5) avg += x.amount;
+    for (auto& x : last5) avg += x.amount;
     avg /= last5.size();
+
     if (t.amount > avg * 3) return 30;
     if (t.amount > avg * 2) return 15;
     return 0;
 }
 
-double FraudRules::locationRule(Transaction t, const vector<Transaction>& last5) {
-    for (auto &x : last5)
-        if (x.location == t.location) return 0;
-    return 20;
+double FraudRules::locationRule(const Transaction& t,
+                                const vector<Transaction>& last5) const {
+    for (auto& x : last5)
+        if (x.location == t.location)
+            return 0;
+    return last5.empty() ? 0 : 20;
 }
 
-double FraudRules::rapidTxnRule(Transaction t, const vector<Transaction>& last5) {
+double FraudRules::rapidTxnRule(const Transaction& t,
+                                const vector<Transaction>& last5) const {
     int count = 0;
-    for (auto &x : last5)
-        if (abs(t.timestamp - x.timestamp) <= 10) count++;
+    for (auto& x : last5)
+        if (abs(t.timestamp - x.timestamp) <= 10)
+            count++;
+
     if (count >= 3) return 25;
     if (count == 2) return 10;
     return 0;
 }
 
-double FraudRules::evaluateRisk(Transaction t, const vector<Transaction>& last5) {
-    if (isBlacklisted(t.fromAccount)) return -1;
-    double score = 0;
-    score += amountRule(t, last5);
-    score += locationRule(t, last5);
-    score += rapidTxnRule(t, last5);
-    return score;
+double FraudRules::evaluateRisk(const Transaction& t,
+                                const vector<Transaction>& last5) const {
+    if (isBlacklisted(t.accountID))
+        return -1;
+
+    return amountRule(t, last5)
+         + locationRule(t, last5)
+         + rapidTxnRule(t, last5);
 }
 
-// ---------------- Utility functions ----------------
+// ---------------- Utilities ----------------
 
 long computeTimestamp(const string& date, const string& time) {
-    int day = stoi(date.substr(8,2));
-    int hour = stoi(time.substr(0,2));
-    int min = stoi(time.substr(3,2));
-    int sec = stoi(time.substr(6,2));
-    return day*10000 + hour*100 + min;
+    tm t{};
+    t.tm_year = stoi(date.substr(0,4)) - 1900;
+    t.tm_mon  = stoi(date.substr(5,2)) - 1;
+    t.tm_mday = stoi(date.substr(8,2));
+    t.tm_hour = stoi(time.substr(0,2));
+    t.tm_min  = stoi(time.substr(3,2));
+    t.tm_sec  = stoi(time.substr(6,2));
+    return mktime(&t);
 }
 
 vector<Transaction> readTransactionsFromFile(const string& filename) {
-    vector<Transaction> transactions;
+    vector<Transaction> txns;
     ifstream file(filename);
+
     if (!file.is_open()) {
-        cout << "Cannot open file: " << filename << endl;
-        return transactions;
+        cout << "Cannot open file\n";
+        return txns;
     }
 
-    string line;
-    while (getline(file, line)) {
-        stringstream ss(line);
-        Transaction t;
-        ss >> t.amount >> t.type >> t.fromAccount >> t.location >> t.date >> t.time;
+    Transaction t;
+    while (file >> t.transactionID >> t.amount >> t.type
+                >> t.accountID >> t.location >> t.date >> t.time) {
         t.timestamp = computeTimestamp(t.date, t.time);
-        transactions.push_back(t);
+        txns.push_back(t);
     }
 
-    file.close();
-    return transactions;
+    return txns;
 }
-

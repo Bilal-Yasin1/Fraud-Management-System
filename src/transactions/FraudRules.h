@@ -4,24 +4,30 @@
 #include "Transaction.h"
 #include <vector>
 #include <unordered_set>
-using namespace std;
 
 class FraudRules {
 private:
-    unordered_set<int> blacklistedAccounts;
+    std::unordered_set<int> blacklistedAccounts;
 
 public:
-    bool isBlacklisted(int acc);
+    bool isBlacklisted(int acc) const;
     void addToBlacklist(int acc);
-    double amountRule(Transaction t, const vector<Transaction>& last5);
-    double locationRule(Transaction t, const vector<Transaction>& last5);
-    double rapidTxnRule(Transaction t, const vector<Transaction>& last5);
-    double evaluateRisk(Transaction t, const vector<Transaction>& last5);
+
+    double amountRule(const Transaction& t,
+                      const std::vector<Transaction>& last5) const;
+    double locationRule(const Transaction& t,
+                        const std::vector<Transaction>& last5) const;
+    double rapidTxnRule(const Transaction& t,
+                        const std::vector<Transaction>& last5) const;
+
+    double evaluateRisk(const Transaction& t,
+                        const std::vector<Transaction>& last5) const;
 };
 
-// Utility functions
-long computeTimestamp(const string& date, const string& time);
-vector<Transaction> readTransactionsFromFile(const string& filename);
+// utilities
+long computeTimestamp(const std::string& date,
+                      const std::string& time);
 
-#endif // FRAUDRULES_H
+std::vector<Transaction> readTransactionsFromFile(const std::string& filename);
 
+#endif
