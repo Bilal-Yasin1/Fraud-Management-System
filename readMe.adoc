@@ -4,7 +4,6 @@ C++ Project – README (AsciiDoc Version with Dot Lists)
 == Overview
 This project implements a Banking Fraud Management System designed to detect, score, and review potentially fraudulent transactions- It uses several data structures—including a Binary Search Tree (BST), linked lists, queues, and a max-heap—to store account data, process incoming transactions, and evaluate suspicious behavior-
 
-A graphical user interface (GUI) will allow administrators to view accounts, inspect transaction histories, and review flagged transactions-
 
 == Core System Workflow
 
@@ -28,9 +27,9 @@ A graphical user interface (GUI) will allow administrators to view accounts, ins
    . Transaction history view
    . Indicators showing transactions under review
 
-== Project Tasks (Team of Four)
+== Project Tasks
 
-=== 1- BST and Transaction List (Team Member 1)
+=== 1- BST and Transaction List
 
 ==== Responsibilities
 - Implement a Binary Search Tree (BST) to store account records:
@@ -54,7 +53,7 @@ pointer to linked list of transactions
 - AccountBST-h / AccountBST-cpp
 - TransactionList-h / TransactionList-cpp
 
-=== 2- Transaction Queue and Fraud Rules (Team Member 2)
+=== 2- Transaction Queue and Fraud Rules
 
 ==== Responsibilities
 - Implement a FIFO transaction queue
@@ -74,7 +73,7 @@ pointer to linked list of transactions
 - FraudRules-h / FraudRules-cpp
 - Optional configuration file for rule thresholds
 
-=== 3- Max Heap for Transaction Review (Team Member 3)
+=== 3- Max Heap for Transaction Review
 
 ==== Responsibilities
 - Implement a max heap storing:
@@ -93,23 +92,6 @@ transactionData
 ==== Deliverables
 - RiskHeap-h / RiskHeap-cpp
 - Integration documentation for other modules
-
-=== 4- GUI Module (Team Member 4)
-
-==== Responsibilities
-- Build GUI using Qt, ImGui, SFML, or similar framework
-- GUI components:
-   . Account list view (BST traversal)
-   . Account detail view
-   . Transaction history list
-   . Indicators for suspicious/pending review items
-   . Admin panel to review and act on max heap items
-- Provide clean interface connections to backend modules
-
-==== Deliverables
-- GUI source files (in /gui)
-- Functional integration with backend logic
-- Optional user instructions or screenshots
 
 == Build Requirements
 
